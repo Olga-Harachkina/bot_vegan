@@ -1,6 +1,6 @@
 import sqlite3
 
-def create_tables():
+def create_tables_new():
     cursor, con = get_connection()
     cursor.execute("""CREATE TABLE IF NOT EXISTS phone(
         name TEXT,
@@ -22,8 +22,3 @@ def all_numbers():
     result = cursor.execute("SELECT * FROM phone").fetchall()
     con.commit()
     return result
-
-
-
-
-
