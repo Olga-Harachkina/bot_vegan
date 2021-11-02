@@ -2,6 +2,7 @@ import json
 import pprint
 
 
+# уаау
 def read_json(path="meny.json"):
 # def read_json():
 
