@@ -1,9 +1,7 @@
 import telebot
 from telebot import types
 import db_coonector
-import json
-# import config_reader
-# import pprint
+import config_reader
 
 bot = telebot.TeleBot('1885102912:AAGGNu8pzR78HFRDl53gn0K8XmOaUDm_RPE')
 
@@ -15,6 +13,7 @@ markup.add(button_phone,information)
 markup_url = types.InlineKeyboardMarkup()
 url = types.InlineKeyboardButton(text='instagram', url='https://instagram.com/hijack.by?utm_medium=copy_link')
 markup_url.add(url)
+
 
 markup_inline = types.InlineKeyboardMarkup()
 sweet_1 = types.InlineKeyboardButton(text='Raw пицца🍕', callback_data='row pizza')
@@ -32,7 +31,7 @@ markup_inline.add(sweet_1, sweet_2, sweet_3, sweet_4, sweet_5, sweet_6, sweet_7,
                   sweet_11)
 
 
-# menu = config_reader.read_json()
+static_content = config_reader.read_json()
 
 db_coonector.create_tables_new()
 
@@ -256,71 +255,32 @@ def pozit(call):
 
 
     elif call.data == 'smoothies':
-        bot.send_photo(caption='*Чоко Бой'
-                               '\n(банан, арахисовая паста, какао, зеленая гречка, кэроб,кокосовое или миндальное молоко)'
-                               '\n300г   9p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-15%2010.05.24.JPEG')
-
-        bot.send_photo(caption='*Малиновый закат'
-                               '\n(малина, черника, банан, зел.гречка, сироп топинамбура, яблоко, кокосовое или миндальное молоко)'
-                               '\n300г    9р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2015.51.36.HEIC')
-
-        bot.send_photo(caption='*Грин дэй'
-                                '\n(шпинат, семена льна, банан, яблоко,зелёная гречка, сок лимона, вода)'
-                                '\n300г    9р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.03.27.HEIC')
-
-        # bot.send_message(call.from_user.id,'*Секси-Рекси'
-        #                                    '\n(банан, клубника,манго, кокосовое и миндальное молоко)'
-        #                                    '\n300г    9p')
+        for k, v in static_content['СМУЗИ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
 
     elif call.data == 'smoothies bowls':
-        # bot.send_photo(caption='*Секси-Рекси'
-        #                         '\n(банан, клубника, манго, кокосовое или миндальное молоко подаётся с гранолой, бананом и кокосовыми чипсами )'
-        #                         '\n420г    12p*',parse_mode='Markdown',
-        #                         chat_id=call.from_user.id,
-        #                         photo='')
+        for k, v in static_content['СМУЗИ-БОУЛ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
-        bot.send_photo(caption='*Чоко Бой'
-                                '\n(банан, арахисовая паста, какао, зел.гречка кэроб, кокосовое или миндальное молоко подается с гранолой, бананом, кокосовыми чипсами и семенами чиа )'
-                                '\n420г    12p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2015.56.49.HEIC')
-
-        bot.send_photo(caption='*Малиновый закат'
-                                '\n(малина, черника, банан, яблоко, кокосовое или миндальное молоко, зелёная гречка, сироп топинамбура подаётся с гранолой, яблоком и семенами чиа)'
-                                '\n420г    12р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.14.40.HEIC')
-
-        bot.send_photo(caption='*Грин дэй'
-                                '\n(шпинат, семена льна, банан, яблоко, зелёная гречка, сок лимона, вода подается с гранолой, яблоком и семенами чиа)'
-                                '\n420г    12р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.25.44.HEIC')
 
     elif call.data == 'healthy shots💪':
+        for k, v in static_content['ХЭЛСИ ШОТЫ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
+            bot.send_message(call.from_user.id,'_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown')
 
-        # menu = json.load(read_file)
-        # pprint
-
-        bot.send_photo(caption='\n*«Оранжевый🟠»'
-                                   '\n(имбирь, мандарин, куркума)'
-                                   '\n20г    3p'
-                                   '\n\n«Зелёный🟢»'
-                                   '\n(сельдерей, яблоко, лайм)'
-                                   '\n20г    3p'
-                                   '\n\n«Красный🔴»'
-                                   '\n(свёкла, грейпфрут, яблоко красное)'
-                                   '\n20г    3p*'
-                                   '\n\n_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown',
-                                    chat_id=call.from_user.id,
-                                    photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.40.07.HEIC')
+        # bot.send_photo(caption='\n*«Оранжевый🟠»'
+        #                            '\n(имбирь, мандарин, куркума)'
+        #                            '\n20г    3p'
+        #                            '\n\n«Зелёный🟢»'
+        #                            '\n(сельдерей, яблоко, лайм)'
+        #                            '\n20г    3p'
+        #                            '\n\n«Красный🔴»'
+        #                            '\n(свёкла, грейпфрут, яблоко красное)'
+        #                            '\n20г    3p*'
+        #                            '\n\n_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown',
+        #                             chat_id=call.from_user.id,
+        #                             photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.40.07.HEIC')
 
 
 bot.polling(none_stop=True,interval=0)
