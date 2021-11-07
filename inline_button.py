@@ -30,26 +30,20 @@ sweet_11 = types.InlineKeyboardButton(text='Горячие напитки☕', c
 markup_inline.add(sweet_1, sweet_2, sweet_3, sweet_4, sweet_5, sweet_6, sweet_7, sweet_8, sweet_9, sweet_10,
                   sweet_11)
 
-
 static_content = config_reader.read_json()
 
 db_coonector.create_tables_new()
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.from_user.id,'*Здравствуй,{0}*'.format(message.from_user.first_name), reply_markup=markup,parse_mode='Markdown')
-    bot.send_message(message.from_user.id,'*Я-HiJack_CaFe🐾,место о здоровой еде,любви к себе и животным💚\nПожалйста,нажми на одну из кнопок ниже⬇*',parse_mode='Markdown')
-
+    bot.send_message(message.from_user.id,'*Здравствуй,{0}👋 \nЯ-HiJack_CaFe🐾,место о здоровой еде,любви к себе и животным💚\nПожалйста,нажми на одну из кнопок ниже⬇*'.format(message.from_user.first_name), reply_markup=markup,parse_mode='Markdown')
+    bot.send_message(message.from_user.id,'_Оставьте свой номер,чтобы одним из первых узнать о наших новых акция и предложениях📲_',parse_mode='Markdown')
 #/contacts-узнать номера телефонов в базе
 @bot.message_handler(commands=['contacts'])
 def start(message):
     nums = db_coonector.all_numbers()
     bot.send_message(message.from_user.id, str(nums), reply_markup=markup)
 
-# @bot.message_handler(content_types=['text'])
-# def numbers(message):
-#     if message.text == 'Оставить номер телефона📲':
-#         bot.
 
 
 @bot.message_handler(content_types=['text'])
@@ -72,6 +66,9 @@ def answer_user(message):
                        chat_id=message.from_user.id,
                        photo='https://cloud.mail.ru/public/fbPU/GjuagHDDK')
 
+    elif message.text == 'Оставить номер телефона📲':
+        bot.send_message(message.from_user.id,'Оставьте свой номер,чтобы одним из первых узнать о наших новых акция и предложениях📲',reply_markup=markup)
+
 
     elif message.text == 'Меню':
         markmenu = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -88,36 +85,13 @@ def answer_user(message):
         bot.send_message(message.from_user.id,'*Выберите одну из кнопок меню⬇*',reply_markup=markup_inline,parse_mode='Markdown')
 
     elif message.text == 'НАШИ АКЦИИ🔥':
-        bot.send_photo(caption='_Обеденная скидка 15%'
-                       '\nКаждый день с 13:00 до 16:00_',parse_mode='Markdown',
-                       chat_id=message.from_user.id,
-                       photo='https://cloud.mail.ru/public/V5E3/YPD2t57hi')
-
-        bot.send_photo(caption='_Система лояльности.'
-                        '\nЗа 10  собранных штампов , вы получаете бесплатный обед.'
-                        'Первые  2 штампа вы получаете в независимости от суммы заказа.'
-                        'Далее, за каждые 30 рублей мы ставим  один штамп.'
-                        'Что вы получаете в подарок собрав 10 штампов?'
-                        ' ⁃ любой смузи;'
-                        '\n⁃ любой десерт;⁃ любое блюдо (салат, либо боул, либо роллы,  либо половника пиццы)._',parse_mode='Markdown',
-                        chat_id=message.from_user.id,
-                        photo='https://cloud.mail.ru/public/1dQd/6xNaPFi5S')
-
-        bot.send_photo(caption='_Акция по выходным: '
-                               '3 хелси ШОТА в подарок при заказе в чеке от 50 рублей_',parse_mode='Markdown',
-                       chat_id=message.from_user.id,
-                       photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.24.06.HEIC')
-        bot.send_message(message.from_user.id,'_Скидка именинникам🥳'
-                               '\nСкидка 10%'
-                               '\nЗа два дня до вашего дня рождения, в день вашего рождения и два дня , после вашего рождения._',parse_mode='Markdown')
-        bot.send_photo(caption='_Весь ноябрь , каждый вторник у нас будет акция 2️⃣ пиццы по цене одной за 27 рублей._',parse_mode='Markdown',
-                       chat_id=message.from_user.id,
-                       photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2014.52.44.HEIC')
+        for k, v in static_content['АКЦИИ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=message.from_user.id, photo=v['Фото'])
 
     elif message.text == 'Вернуться в главное меню':
         bot.send_message(message.from_user.id,'*Пожалйста,нажми на одну из кнопок ниже⬇*',parse_mode='Markdown',reply_markup=markup)
 
-
+#выводит данные в терминале
 @bot.message_handler(content_types=['contact'])
 def contact_handler(message):
     name = message.contact.first_name
@@ -130,158 +104,50 @@ def contact_handler(message):
 @bot.callback_query_handler(func = lambda call : True)
 def pozit(call):
     if call.data == 'row pizza':
-       bot.send_photo(caption='*#1\n(основа для пиццы, кешью-майонез, "не мясо", томаты черри, маслины, оливки,руккола, томатный соус)'
-                              '\n350г  27р*',parse_mode='Markdown',
-                              chat_id=call.from_user.id,
-                              photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2014.38.28.HEIC')
-
-       bot.send_photo(caption='*#2\n(основа для пиццы, кешью-майонез,томаты черри, маринованные грибы,тофу, авокадо, маслины, базилик, соус песто)'
-                              '\n350г  27р*',parse_mode='Markdown',
-                              chat_id= call.from_user.id,
-                              photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2014.41.27.HEIC')
+        for k, v in static_content['RAW ПИЦЦА'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
     elif call.data == 'hot drinks':
-        bot.send_message(call.from_user.id,'*Эспрессо    3р'
-                                           '\n\nАмерикано   3р'
-                                           '\n\nКапучино    250мл    6p'
-                                           '\n\nКапучино    350мл    7p'
-                                           '\n\nФлет-уайт    7р'
-                                           '\n\nЛатте    7p'
-                                           '\n\nКакао    6р'
-                                           '\n\nКакао с кэробом    6р'
-                                           '\n\nМатча    6р'
-                                           '\n\nТравяной чай    3р*',parse_mode='Markdown')
+        for k, v in static_content['ГОРЯЧИЕ НАПИТКИ'].items():
+            bot.send_message(text= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id)
 
     elif call.data == 'freshly squeezed juices':
-        bot.send_message(call.from_user.id,'*Апельсин🍊    8р'
-                                           '\n\nГрейпфрут    8p'
-                                           '\n\nЯблоко🍎    8p'
-                                           '\n\nСвёкла-апельсин    8p*',parse_mode='Markdown')
+        for k, v in static_content['СВЕЖЕВЫЖАТЫЕ'].items():
+            bot.send_message(text= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id)
+
     elif call.data == 'salat':
-        bot.send_photo(caption='*Зелёный и полезный'
-                                '\n(айсберг, рамен, маринованный тофу, авокадо, огурец, кешью, зелёная горчичная заправка, кукурузные хлебцы)'
-                                '\n240г    14p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.50.09.HEIC')
-
-        bot.send_photo(caption='*Компромиссо'
-                               '\n(aйсберг, руккола, маринованный тофу, авокадо, томаты черри, мисо-майонез, кукурузные хлебцы)'
-                               '\n290г    14р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2015.20.00.HEIC')
-
-        bot.send_photo(caption='*Пушка, бомба, ракета'
-                                '\n(aйсберг, рамен, "не мясо", томаты Черри,томатный соус, кешью-майонез,кунжут, кукурузные хлебцы)'
-                                '\n290г    12р*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.44.45.HEIC')
+        for k, v in static_content['САЛАТЫ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
     elif call.data == 'spring rolls':
-        bot.send_photo(caption='*Чак Нори'
-                                '\n(рисовая бумага, тофу, авокадо, огурец, нори, кешью-майонез, кунжут подаются с соевым соусом)'
-                                '\n140г    8p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/YVU2/U63bJjHgq/2021-10-11%2016.55.27.HEIC')
-
-        bot.send_photo(caption='*Овощная вечеринка'
-                                '\n(рисовая бумага, фунчоза, тофу, авокадо,огурец, красная капуста, морковь, арахис,мята, кунжут подаются с домашним арахисовым соусом)'
-                                '\n150г    8p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/YVU2/U63bJjHgq/2021-10-11%2017.08.06.HEIC')
-
+        for k, v in static_content['СПРИНГ-РОЛЛЫ'].items():
+            bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
     elif call.data == 'bowls':
-        bot.send_photo(caption='*Гречка-боул «Зэ бэст гречка»'
-                                '\n(гречка, нори, маринованный тофу, авокадо,оливки, кешью-майонез, кунжут)'
-                                '\n330г    12p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.36.54.HEIC')
-
-        bot.send_photo(caption='*Лапша-боул «Обещания бывших»'
-                               '\n(фунчоза, томаты Черри, морковь,маринованный тофу, авокадо, маринованный вакаме, арахисовый соус, мисо-майонез, кунжут, арахис)'
-                               '\n350г    12p*',parse_mode='Markdown',
-                               chat_id=call.from_user.id,
-                               photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2015.12.43.HEIC')
-
-        bot.send_photo(caption='*Цукини-паста «Зудлс»'
-                               '\n(цукини, томаты черри, базилик, кешью,соус песто, кукурузные хлебцы)'
-                               '\n290г    13p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2016.28.48.HEIC')
+        for k, v in static_content['БОУЛЫ'].items():
+            bot.send_photo(caption="*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown',chat_id=call.from_user.id, photo=v['Фото'])
 
     elif call.data == 'soup':
-        bot.send_photo(caption='Крем-суп из зелёного горошка\n'
-                               '7p',
-                       chat_id=call.from_user.id,
-                       photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.21.40.HEIC')
-        bot.send_photo(caption='Мисо суп\n'
-                               '7p',
-                       chat_id=call.from_user.id,
-                       photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.18.09.HEIC')
+        for k, v in static_content['СУПЫ'].items():
+            bot.send_photo(caption="*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown',chat_id=call.from_user.id, photo=v['Фото'])
 
-        bot.send_message(call.from_user.id,'*Подаётся с кукурузными хлебцами*',parse_mode='Markdown')
     elif call.data == 'sweet':
+        for k, v in static_content['СЛАДКОЕ'].items():
+            bot.send_photo(caption="*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown',chat_id=call.from_user.id, photo=v['Фото'])
         bot.send_message(call.from_user.id,'_🐝-ПРОДУКТ СОДЕРЖИТ МЁД_',parse_mode='Markdown')
-
-        bot.send_photo(caption='*Торт «Морковный с черникой и черносливом»'
-                               '\n7 рублей'
-                               '\n\nТорт «Морковный с клюквой и курагой»'
-                                '\n7 рублей*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/Qas5/KQB5MDh3E')
-
-        bot.send_photo(caption='*Торт «Турбо»    7p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/Zdjs/VxqKtSMqT')
-
-        bot.send_photo(caption='*Пряник/Пряник🐝'
-                               '\n4p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/4WJ4/7tA7KrdXQ')
-
-        bot.send_photo(caption='*Халва/Халва шоколадная\n'
-                               'Халва🐝/Халва шоколадная🐝'
-                               '\n1.5p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/43zE/Cvp5XMk5L')
-
-        bot.send_photo(caption='*Энергобатончик/Энергобатончик🐝'
-                               '\n50г/100г    3/6.5p*',parse_mode='Markdown',
-                                chat_id=call.from_user.id,
-                                photo='https://cloud.mail.ru/public/y97V/XPER8w89v')
-
-# '\n\n«Печенье»    1.5p'
-                                          
-
 
     elif call.data == 'smoothies':
         for k, v in static_content['СМУЗИ'].items():
             bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
-
     elif call.data == 'smoothies bowls':
         for k, v in static_content['СМУЗИ-БОУЛ'].items():
             bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
 
-
-    elif call.data == 'healthy shots💪':
-        for k, v in static_content['ХЭЛСИ ШОТЫ'].items():
+    elif call.data == 'healthy shots':
+        for k, v in static_content['ШОТЫ'].items():
             bot.send_photo(caption= "*" + k + "\n" + v['Описание'] + "*", parse_mode='Markdown', chat_id=call.from_user.id, photo=v['Фото'])
-            bot.send_message(call.from_user.id,'_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown')
-
-        # bot.send_photo(caption='\n*«Оранжевый🟠»'
-        #                            '\n(имбирь, мандарин, куркума)'
-        #                            '\n20г    3p'
-        #                            '\n\n«Зелёный🟢»'
-        #                            '\n(сельдерей, яблоко, лайм)'
-        #                            '\n20г    3p'
-        #                            '\n\n«Красный🔴»'
-        #                            '\n(свёкла, грейпфрут, яблоко красное)'
-        #                            '\n20г    3p*'
-        #                            '\n\n_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown',
-        #                             chat_id=call.from_user.id,
-        #                             photo='https://thumb.cloud.mail.ru/weblink/thumb/xw1/YVU2/U63bJjHgq/2021-10-11%2017.40.07.HEIC')
-
+        bot.send_message(call.from_user.id,'_1 ШОТ-3p    2 ШОТА-5.5p    3 ШОТА-8p_',parse_mode='Markdown')
 
 bot.polling(none_stop=True,interval=0)
 
