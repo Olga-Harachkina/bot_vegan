@@ -38,12 +38,12 @@ db_coonector.create_tables_new()
 def start(message):
     bot.send_message(message.from_user.id,'*Здравствуй,{0}👋 \nЯ-HiJack_CaFe🐾,место о здоровой еде,любви к себе и животным💚\nПожалйста,нажми на одну из кнопок ниже⬇*'.format(message.from_user.first_name), reply_markup=markup,parse_mode='Markdown')
     bot.send_message(message.from_user.id,'_Оставьте свой номер,чтобы одним из первых узнать о наших новых акция и предложениях📲_',parse_mode='Markdown')
+
 #/contacts-узнать номера телефонов в базе
 @bot.message_handler(commands=['contacts'])
 def start(message):
     nums = db_coonector.all_numbers()
     bot.send_message(message.from_user.id, str(nums), reply_markup=markup)
-
 
 
 @bot.message_handler(content_types=['text'])
